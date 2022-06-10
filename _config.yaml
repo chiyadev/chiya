@@ -1,0 +1,22 @@
+title: chiya.dev
+tagline: Playing games and writing code…
+url: "https://chiya.dev"
+baseurl: "/"
+permalink: "/posts/:categories/:year-:month-:day-:title"
+
+author:
+  twitter: luanekos
+
+paginate: 5
+paginate_path: "/posts/:num"
+
+extlinks:
+  attributes:
+    target: _blank
+    rel: noopener noreferrer
+
+plugins:
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-paginate
+  - jekyll-extlinks

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  {% include head.html %}
+
+  <body>
+    {% if page.url == "/" %}
+      {% include landing.html %}
+    {% endif %}
+
+    {% include sidebar.html %}
+
+    <main class="content container">
+      {{ content | extlinks }}
+    </main>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+.sidebar h1 {
+  font-family: "Grand Hotel", cursive;
+}
+
+.sidebar h1 > a {
+  font-size: 1.2em;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sidebar .author::before {
+  content: "";
+  display: inline-block;
+  background: center / cover url("/favicon-32x32.png");
+  width: 1em;
+  height: 1em;
+  border-radius: 1em;
+  vertical-align: sub;
+  margin-right: 0.25em;
+}
+
+.landing {
+  display: none;
+  position: relative;
+  background-color: #202020;
+}
+
+.landing::after {
+  content: "";
+  display: block;
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  width: 10em;
+  height: 10em;
+  background: center / cover url("/assets/dance.gif");
+  opacity: 0.1;
+}
+
+@media (min-width: 48em) {
+  .landing {
+    display: block;
+    height: 100vh;
+  }
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  text-align: center;
+}
+
+.scroll-indicator:hover {
+  color: white;
+}
+
+.pagination-item {
+  border: none;
+  transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.related h2 {
+  margin-bottom: 1rem;
+}
+
+.related-posts h4 {
+  margin-top: 0;
+}
+
+.post-tags {
+  display: inline;
+  list-style: none;
+  padding-left: 0;
+}
+
+.post-tags li {
+  display: inline;
+}
+
+.post-tags label {
+  background-color: #eee;
+  padding: 0.05rem 0.2rem;
+  border-radius: 0.1rem;
+}
+
+.posts > .post:not(:first-child) {
+  padding-top: 2rem;
+}
+
+.tag-title {
+  text-transform: capitalize;
+}
+
+footer {
+  margin-top: 3rem;
+}
+
+.counter {
+  background: no-repeat center / contain
+    url("https://count.chiya.dev/get/@luaneko");
+  width: 15rem;
+  height: 5rem;
+  opacity: 0.2;
+  transition: 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  float: right;
+}
+
+.counter:hover {
+  opacity: 1;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
