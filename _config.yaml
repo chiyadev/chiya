@@ -1,5 +1,4 @@
 title: chiya.dev
-tagline: Playing games and writing code…
 url: "https://chiya.dev"
 baseurl: "/"
 permalink: "/posts/:categories/:year-:month-:day-:title"
