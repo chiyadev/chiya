@@ -180,20 +180,19 @@ A _call stack_ is tied to a real _OS thread_.
 
 With that in mind, let's imagine what might happen when the Lua runtime encounters some Lua code that wants to throw an exception.
 It pushes the exception value onto the Lua stack, then performs a `longjmp` back to the recovery point.
-This is like traversing _up_ the call stack with a `goto` until the recovery point, _forgetting_ all stack frames between the `longjmp` and `setjmp` points.
+This is like traversing _up_ the call stack with a `goto` until the recovery point, _jumping over_ all stack frames between the `longjmp` and `setjmp` points.
 The recovery point then detects that a `longjmp` had occurred and pops the exception value from the Lua stack.
 
 This is perfectly fine in the context of plain old C code.
 However, where it becomes problematic is when _Rust_ code is intermingled with C code.
-The issue with `longjmp` is that it is completely unaware of _destructors_.
-Unlike real exception mechanisms that properly unwind the call stack and call destructors for the values on every stack frame, `longjmp` just restores the call stack to the point of `setjmp` as if all stack frames that occurred between the two points didn't even exist.
-If one of those [disappearing stack frames][12] happened to be _Rust's_ stack frame, then any Rust value implementing `Drop` in that frame would not be deallocated properly.
+The issue with `longjmp` is that its behavior is platform-dependent and [it does not play nicely with Rust's destructors][6].
+`longjmp` could be implemented by simply changing the stack pointer which results in Rust's stack frames being "forgotten".
+Although safe Rust doesn't actually guarantee that destructors are ever called, it would be in our best interests to avoid leaking memory by forgetting destructors.
+`longjmp` could also be implemented by unwinding the stack, and it may or may not call destructors while unwinding.
+If it does call destructors, that would trigger undefined behavior unless the Rust stack frame is marked with [`C-unwind` which is still experimental][13].
 
-It's interesting to note that forgetting stack frames like this is technically **safe**.
-Safe Rust does not actually guarantee that `Drop` is called!
-If we imagine the stack frames as being Rust values, doing a `longjmp` is like [calling `mem::forget` on the stack frames][6]. `mem::forget` is a **safe** function.
-
-However, it's clearly in our best interests to prevent stack frames from getting forgotten, because not calling destructors will obviously leak memory.
+It seems like there is no way to write safe Rust code that can be jumped over by `longjmp` without relying on platform implementation details.
+We also want to be able to catch exceptions without letting them propagate through Rust code.
 That means we need to wrap every fallible code in a protected context so that the exception is caught before it touches Rust stack frames.
 Fortunately, Lua provides `lua_pcall` to do exactly this.
 
@@ -320,3 +319,4 @@ I've yet to explore this area further, but the possibility of safe zero-cost abs
 [10]: https://doc.rust-lang.org/cargo/reference/profiles.html#lto
 [11]: https://doc.rust-lang.org/reference/attributes/limits.html#the-recursion_limit-attribute
 [12]: https://blog.rust-lang.org/inside-rust/2021/01/26/ffi-unwind-longjmp.html
+[13]: https://rust-lang.github.io/rfcs/2945-c-unwind-abi.html
