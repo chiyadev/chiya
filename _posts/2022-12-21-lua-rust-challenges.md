@@ -10,7 +10,7 @@ I may or may not publish my code as a crate eventually, but regardless, here are
 ### Ensuring stack space
 
 Most Lua APIs interact with the stack, and the [Lua documentation][2] emphasizes that you (the caller) must ensure there is enough stack space before calling a function that modifies the stack.
-The stack is a FIFO collection, and the API offers many functions to push, pop and inspect the elements inside it.
+The stack is a LIFO collection, and the API offers many functions to push, pop and inspect the elements inside it.
 The API does not perform bounds checking however, so if you don't ensure enough space for an operation, it will trigger **undefined behavior**.
 
 Writing safe Rust code means it can never trigger UB.
